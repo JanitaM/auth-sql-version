@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+    integrity="sha256-ECB9bbROLGm8wOoEbHcHRxlHgzGqYpDtNTgDTyDz0wg=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <title>Blog Project | Join</title>
+</head>
+
+<body>
+  <nav id="nav-bar" class="container">
+    <h3 class="logo u-pull-left">Blog Project</h3>
+    <div class="u-pull-right">
+      <a id="home-link" class="button" href="/">HOME</a>
+      <a id="signin-link" class="button button-primary" href="signin">SIGN IN</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h4 class="m2-ta">Create an account below...</h4>
+    <!-- Insert Alert Message Here -->
+    <form id="join-form" class="m2-ta">
+      <div class="row">
+        <div class="six columns">
+          <input id="first-name" class="u-full-width" type="text" placeholder="ENTER FIRST NAME">
+        </div>
+        <div class="six columns">
+          <input id="last-name" class="u-full-width" type="text" placeholder="ENTER LAST NAME">
+        </div>
+      </div>
+      <div class="row">
+        <div class="six columns">
+          <input id="username" class="u-full-width" type="text" placeholder="CREATE USERNAME">
+        </div>
+        <div class="six columns">
+          <input id="password" class="u-full-width" type="password" placeholder="CREATE PASSWORD">
+        </div>
+      </div>
+    </form>
+    <div class="m2-ta">
+      <button id="join-btn" class="button-primary">Join</button>
+    </div>
+  </main>
+
+  <script type="module" src="join.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+.error,
+.success { 
+  border-radius: 5px;
+  color: #fff;
+  padding: 5px;
+  text-align: center;
+}
+
+.error { background:#F24405; }
+
+.success { background:#04D94F; }
+
+#update-container { display: none; }
+
+#contact-container { display: none; }
+
+.delete-btn { border: 2px solid #BBB; }
+
+.m2-ta { 
+  margin-top: 2rem; 
+  text-align: center;
+}
+
+h1 { margin-top: 4rem; }
+
+ul { list-style: none; }
+
+a { text-decoration: none;}
