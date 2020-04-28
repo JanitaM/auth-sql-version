@@ -52,7 +52,9 @@ app.get("/join", async (request, response) => {
 app.get("/viewposts", async (request, response) => {
   try {
     console.log("SEND VIEW POSTS PAGE");
-    response.sendFile(path.join(__dirname, "/views/viewposts.html"));
+    const con = await pool.getConnection();
+    const result = await con.query(`SELECT * FROM authUser.post`);
+    response.send(result[0]);
   } catch (error) {
     console.log(error);
     response.status(500).send(error.message);
@@ -145,6 +147,8 @@ app.get('/blogPosts', authorizeUser, async (request, response) => {
   try {
     const con = await pool.getConnection();
     const authorName = request.user.username;
+
+
     const userInfo = await con.query(`SELECT * FROM authUser.post WHERE user_id=(SELECT user_id FROM authUser.user WHERE username='${authorName}')`);
 
     response.status(200).send({ author: authorName, data: userInfo });

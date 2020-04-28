@@ -4,23 +4,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Day Simple Auth - Landing</title>
-  <script src="landing.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+    integrity="sha256-ECB9bbROLGm8wOoEbHcHRxlHgzGqYpDtNTgDTyDz0wg=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="style.css" type="text/css">
+  <title>Blog Project | Sign In</title>
 </head>
 
 <body>
-  <h2>You're signed in!</h2>
-  <div id="render"></div>
-  <button id="logout" onclick="logout()">Log Out</button>
+  <nav id="nav-bar" class="container">
+    <h3 class="logo u-pull-left">Blog Project</h3>
+    <div class="u-pull-right">
+      <a id="home-link" class="button" href="/">HOME</a>
+      <a id="logout-link" class="button button-primary" href="/loggedout">LOG OUT</a>
+    </div>
+  </nav>
+  <div>
+    <a id="new-post-link" class="button button-primary" href="/new-post">CREATE POST</a>
+  </div>
+  <header>
 
-  <br /><br /><br />
-  <div id="render-username"></div><br />
-  <label>Write a Blog</label><br />
-  <textarea id="blog-body" cols="60" rows="10"></textarea><br />
-  <button type="submit" onclick="submitBlog()">Submit</button>
+  </header>
+  <main class="container">
+    <h4 class="m2-ta">You are signed in.</h4>
+    <p>Below are all of your posts.</p>
+    <div>
+      <!-- render user's posts here -->
+    </div>
 
-  <script>getPostsByAuthor()</script>
+  </main>
 
+  <script src="landing.js"></script>
 </body>
 
 </html>
