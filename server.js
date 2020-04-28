@@ -102,29 +102,26 @@ app.get("/signin", async (request, response) => {
   }
 });
 
-// Sign in/Authenticate User
+// Sign in/Authenticate User - DONE
 app.post("/users/login", async (request, response) => {
   try {
-    const myQuery = `SELECT * FROM authUser.user WHERE user.username='${request.body.username}';`;
+    const myQuery = `SELECT * FROM authUser.user WHERE username='${request.body.username}';`;
     const con = await pool.getConnection();
     const result = await con.query(myQuery);
     con.release();
 
-    console.log('result[0]', result[0]); //this works
-    console.log('result[0][0].username', result[0][0].username); //this works
-
     const hashedPassword = result[0][0].password;
-    const pullingUsername = result[0][0].username;
+    const userID = result[0][0].user_id;
 
     if (await bcrypt.compare(request.body.password, hashedPassword)) {
-      const userInfo = { username: request.body.username, username: pullingUsername };
+      const userInfo = { username: request.body.username, user_id: userID };
       const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
-      console.log('accesstoken', accessToken); //this works
+      console.log('accesstoken', accessToken);
 
       response
-        .status(202)
-        .cookie('blogAccessToken', accessToken)
-        .redirect(303, "/users/landing");
+        .status(200)
+        .cookie('accessToken', accessToken)
+        .redirect(301, "/users/landing");
     } else {
       response.sendStatus(403, 'Incorrect Password');
     }
