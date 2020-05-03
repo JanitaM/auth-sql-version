@@ -33,7 +33,6 @@ async function postUserToDatabase() {
         },
         body: JSON.stringify(user)
       })
-      console.log(response);
 
       if (response.redirected) {
         window.location = response.url
@@ -44,11 +43,4 @@ async function postUserToDatabase() {
   }
 
   clearFields();
-}
-
-function clearFields() {
-  firstName.value = ""
-  lastName.value = ""
-  username.value = ""
-  password.value = ""
 }

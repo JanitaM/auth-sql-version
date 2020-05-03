@@ -139,6 +139,7 @@ app.get("/users/landing", async (request, response) => {
   try {
     response.sendFile(path.join(__dirname, "/views/landing.html"));
   } catch (error) {
+    console.log(error);
     response.status(500).send(error);
   }
 });
@@ -175,10 +176,23 @@ function authenticateToken(request, response, next) {
   // Verify the token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, username) => {
     if (error) return response.sendStatus(403) //token exists but not valid
-    request.username = username //pass usernane on to post
+    request.username = username //pass username on to post
     next()
   });
 }
+
+// Logout - GET vs POST? POST doesn't reset cookie.. can still access users/landing
+app.get('/logout', async (request, response) => {
+  try {
+    response
+      .status(200)
+      .cookie('accessToken', "")
+      .redirect(303, "/");
+  } catch (error) {
+    console.log(error);
+    response.status(500).send(error.message);
+  }
+});
 
 const start = () => {
   return app.listen(PORT, () => console.log(`server is running on PORT ${PORT}`));
