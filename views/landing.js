@@ -1,5 +1,4 @@
-// Variables
-const renderDiv = document.getElementById('render');
+document.addEventListener('DOMContentLoaded', getPostsByAuthor);
 
 async function getPostsByAuthor() {
   try {
@@ -10,20 +9,22 @@ async function getPostsByAuthor() {
       }
     });
 
-    const blogPosts = await response.json();
-    console.log('blogPosts', blogPosts);
+    const userInfo = await response.json();
+    const posts = userInfo.data[0];
 
-    for (let i = 0; i < blogPosts.length; i++) {
-      document.getElementById("render").innerHTML += `
-      <div>
-        <h2>${blogPosts[i].title}</h2>
-        <p>${blogPosts[i].text}</p>
-      </div>
-    `;
-    }
+    displayOnUI(posts);
   } catch (error) {
-    console.error(error.message);
+    console.error('error', error.message);
   }
 }
 
-getPostsByAuthor();
+const displayOnUI = posts => {
+  document.getElementById
+
+  for (let post of posts) {
+    document.getElementById("display-user-posts").innerHTML += `<div class="card">
+      <h4>${post.post_title}</h4>
+      <p>${post.post_text}</p>
+    </div>`
+  }
+}

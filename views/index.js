@@ -17,8 +17,7 @@ async function getAllDatabasePosts() {
 
 const displayOnUI = posts => {
   for (let post of posts) {
-    document.getElementById("display-all-posts").innerHTML += `
-    <div class="card">
+    document.getElementById("display-all-posts").innerHTML += `<div class="card">
       <h4>${post.post_title}</h4>
       <p>${post.post_text}</p>
     </div>`

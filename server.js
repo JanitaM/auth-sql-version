@@ -48,7 +48,7 @@ app.get("/join", async (request, response) => {
   }
 })
 
-// GET viewposts.html - DONE
+// GET ALL POSTS viewposts.html - DONE
 app.get("/viewposts", async (request, response) => {
   try {
     console.log("SEND VIEW POSTS PAGE");
@@ -85,7 +85,7 @@ app.post("/user/join", async (request, response) => {
 
     response
       .status(201)
-      .cookie('blogAccessToken', accessToken)
+      .cookie('accessToken', accessToken)
       .redirect(303, '/signin');
   } catch (error) {
     console.log(error);
@@ -107,6 +107,7 @@ app.get("/signin", async (request, response) => {
 // Sign in/Authenticate User - DONE
 app.post("/users/login", async (request, response) => {
   try {
+    console.log("AUTH USER");
     const myQuery = `SELECT * FROM authUser.user WHERE username='${request.body.username}';`;
     const con = await pool.getConnection();
     const result = await con.query(myQuery);
@@ -118,7 +119,7 @@ app.post("/users/login", async (request, response) => {
     if (await bcrypt.compare(request.body.password, hashedPassword)) {
       const userInfo = { username: request.body.username, user_id: userID };
       const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET);
-      console.log('accesstoken', accessToken);
+      // console.log('accesstoken', accessToken);
 
       response
         .status(200)
@@ -133,7 +134,7 @@ app.post("/users/login", async (request, response) => {
   }
 });
 
-// GET users' landing
+// GET users' landing - DONE
 app.get("/users/landing", async (request, response) => {
   try {
     response.sendFile(path.join(__dirname, "/views/landing.html"));
@@ -142,16 +143,20 @@ app.get("/users/landing", async (request, response) => {
   }
 });
 
-// GET users' blogs
-app.get('/blogPosts', authorizeUser, async (request, response) => {
+// GET user's blogs - DONE
+app.get('/blogPosts', authenticateToken, async (request, response) => {
   try {
+    console.log("SEND USER'S POSTS");
+
+    const userID = request.username.user_id;
+    const authorName = request.username.username;
+
     const con = await pool.getConnection();
-    const authorName = request.user.username;
+    const userInfo = await con.query(`SELECT * from authUser.post WHERE user_id='${userID}'`);
 
-
-    const userInfo = await con.query(`SELECT * FROM authUser.post WHERE user_id=(SELECT user_id FROM authUser.user WHERE username='${authorName}')`);
-
-    response.status(200).send({ author: authorName, data: userInfo });
+    response
+      .status(200)
+      .send({ author: authorName, data: userInfo });
     await con.release();
   } catch (error) {
     console.log(error);
@@ -159,25 +164,20 @@ app.get('/blogPosts', authorizeUser, async (request, response) => {
   }
 });
 
-// Middleware 
-function authorizeUser(request, response, next) {
+// Middleware - DONE
+function authenticateToken(request, response, next) {
   // Get the token that is sent
-  const authHeader = request.header.authorization;
-  console.log('authHeader', authHeader);
-  const getToken = authHeader && authHeader.split(' ')[1];
-  console.log('getToken', getToken);
+  const authHeader = request.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
-  if (getToken == null) {
-    return response.status(401).send("Invalid Token");
-  }
-  // Verify that it's the correct user
-  jwt.verify(getToken, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
-    if (error) return response.sendStatus(403) //valid token? then move on
-    request.user = user //pass user on to post
-    console.log(request.user);
+  if (token == null) return response.sendStatus(401);
+
+  // Verify the token
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, username) => {
+    if (error) return response.sendStatus(403) //token exists but not valid
+    request.username = username //pass usernane on to post
     next()
-  })
-  // Return the user to the function that gets the posts
+  });
 }
 
 const start = () => {
